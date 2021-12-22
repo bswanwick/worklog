@@ -1,3 +1,13 @@
+# Worklog
+
+It runs. Create React App with Typescript, RXjs, rxjs-hooks, and TailwindCSS.
+
+Might convert /src/index.tsx to /src/index.ts thus keeping React isolated to the /components directory.
+
+Application state is kept in /services/state.ts.  Instead of Redux and mapStateToProps, or the hook equivalent thereof, we use Observables and the useObservable hook.
+
+useObservable calls .subscribe() for you, which isn't ideal because we should be more explicit about "starting" our services.  calling useObservable shouldn't start a service, which it does at present.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
