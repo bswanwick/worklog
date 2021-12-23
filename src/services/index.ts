@@ -3,7 +3,7 @@ import timer from './timer';
 
 const services = {
   state,
-  timer
+  timer,
 };
 
 export type Services = typeof services;

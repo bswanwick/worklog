@@ -1,3 +1,7 @@
+12/23/2021
+Installed eslint and prettier
+did not keep accurate log. installed a bunch of plugin crap.
+
 12/22/2021
 Installed Node Version 17.3.0 via NVM
 Installed Yarn: 
