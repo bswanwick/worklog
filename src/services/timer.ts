@@ -1,4 +1,4 @@
-import { delay, filter, interval, map, switchMap, tap } from 'rxjs';
+import { delay, filter, interval, map, switchMap, take, tap } from 'rxjs';
 import state from './state';
 
 // timer is a service that emits an incrementing integer at intervalMs starting from 0
@@ -11,6 +11,7 @@ const timer = (intervalMs: number) =>
     ),
     filter((state) => state.reactRendered),
     delay(5000),
+    take(1),
     switchMap(() =>
       interval(intervalMs).pipe(
         tap((i) => console.log('[worklog.services.timer] timer service go boom ' + i)),

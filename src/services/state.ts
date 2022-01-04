@@ -1,31 +1,37 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-type ApplicationState = {
+export type ApplicationState = {
   reactRendered: boolean;
+  numberOfTimesButtonPressed: number;
 };
 
-const applicationState: ApplicationState = {
+export type ExpectState = (selector: () => Partial<ApplicationState>) => Observable<Partial<ApplicationState>>;
+
+const defaultApplicationState: ApplicationState = {
   reactRendered: false,
+  numberOfTimesButtonPressed: 0,
 };
 
-// state as a service
-// TODO this is probably a bad idea and I should have just used Redux.
-const state$ = new BehaviorSubject<ApplicationState>(applicationState);
+// setup our application state as a service
+const state$ = new BehaviorSubject<ApplicationState>(defaultApplicationState);
 
-state$.subscribe((state) => console.log('[worklog.services.state] state$ detected an update.', state));
+if (process.env.DEBUG_MODE)
+  state$.subscribe((state) => console.log('[worklog.services.state] DEBUG_MODE detected an update in state$.', state));
 
-// EXAMPLE using .pipe() instead
+// Example of how to read from state using .pipe() instead
 // don't forget to.subscribe() to the Observable returned by .pipe()!!!
 // state$.pipe(
 //   tap((state)=>console.log('[worklog.services.state] state$ detected an update in pipe.', state))
 // ).subscribe();
 
-// updateState receives a Partial<ApplicationState> and spreads it over the current state$.value
-const updateState = (updatePayload: Partial<ApplicationState>) => {
+function updateState(updatePayload: Partial<ApplicationState>) {
   console.log('[worklog.services.state] updateState received an updatePayload!', updatePayload);
-  state$.next({ ...state$.value, ...updatePayload });
-};
+  state$.next({ ...state$.getValue(), ...updatePayload }); // TODO object.assign instead?
+}
 
+// setup our state object for use in the application.
+// One Observable to subscribe to state updates.
+// And one function to write updates.
 const state = {
   state$,
   updateState,
