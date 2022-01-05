@@ -2,7 +2,7 @@ import state from './state';
 
 const buttonPressedCounter = () => {
   const numberOfTimesButtonPressed = state.state$.getValue().numberOfTimesButtonPressed + 1;
-  state.updateState({ numberOfTimesButtonPressed });
+  state.setState({ numberOfTimesButtonPressed });
 };
 
 const button = {

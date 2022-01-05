@@ -1,11 +1,9 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 export type ApplicationState = {
   reactRendered: boolean;
   numberOfTimesButtonPressed: number;
 };
-
-export type ExpectState = (selector: () => Partial<ApplicationState>) => Observable<Partial<ApplicationState>>;
 
 const defaultApplicationState: ApplicationState = {
   reactRendered: false,
@@ -15,8 +13,7 @@ const defaultApplicationState: ApplicationState = {
 // setup our application state as a service
 const state$ = new BehaviorSubject<ApplicationState>(defaultApplicationState);
 
-if (process.env.DEBUG_MODE)
-  state$.subscribe((state) => console.log('[worklog.services.state] DEBUG_MODE detected an update in state$.', state));
+state$.subscribe((state) => console.log('[worklog.services.state] DEBUG_MODE detected an update in state$.', state));
 
 // Example of how to read from state using .pipe() instead
 // don't forget to.subscribe() to the Observable returned by .pipe()!!!
@@ -24,8 +21,8 @@ if (process.env.DEBUG_MODE)
 //   tap((state)=>console.log('[worklog.services.state] state$ detected an update in pipe.', state))
 // ).subscribe();
 
-function updateState(updatePayload: Partial<ApplicationState>) {
-  console.log('[worklog.services.state] updateState received an updatePayload!', updatePayload);
+function setState(updatePayload: Partial<ApplicationState>) {
+  console.log('[worklog.services.state] setState received an updatePayload!', updatePayload);
   state$.next({ ...state$.getValue(), ...updatePayload }); // TODO object.assign instead?
 }
 
@@ -34,7 +31,7 @@ function updateState(updatePayload: Partial<ApplicationState>) {
 // And one function to write updates.
 const state = {
   state$,
-  updateState,
+  setState,
 };
 
 export default state;
